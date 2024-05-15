@@ -6,7 +6,7 @@ import json
 import gradio as gr
 import pandas as pd
 
-from huggingface_hub import CommitScheduler
+#from huggingface_hub import CommitScheduler
 from pathlib import Path
 
 # Run the training script placed in the same directory as app.py
@@ -21,16 +21,16 @@ insurance_charge_predictor = joblib.load('model.joblib')
 
 # Prepare the logging functionality
 
-log_file = Path("logs/") / f"data_{uuid.uuid4()}.json"
-log_folder = log_file.parent
+# log_file = Path("logs/") / f"data_{uuid.uuid4()}.json"
+# log_folder = log_file.parent
 
-scheduler = CommitScheduler(
-    repo_id="insurance-charge-mlops-logs",
-    repo_type="dataset",
-    folder_path=log_folder,
-    path_in_repo="data",
-    every=2
-)
+# scheduler = CommitScheduler(
+#     repo_id="insurance-charge-mlops-logs",
+#     repo_type="dataset",
+#     folder_path=log_folder,
+#     path_in_repo="data",
+#     every=2
+# )
 
 # Define the predict function that runs when 'Submit' is clicked or when a API request is made
 def predict_insurance_charge(age, bmi, children,sex, smoker, region):
@@ -50,20 +50,20 @@ def predict_insurance_charge(age, bmi, children,sex, smoker, region):
     # While writing to the log file, ensure that the commit scheduler is locked to avoid parallel
     # access
     
-    with scheduler.lock:
-        with log_file.open("a") as f:
-            f.write(json.dumps(
-                {
-                    'age': age,
-                    'bmi': bmi,
-                    'children': children,
-                    'sex': sex,
-                    'smoker': smoker,
-                    'region': region,
-                    'prediction': prediction[0]
-                }
-            ))
-            f.write("\n")
+    # with scheduler.lock:
+    #     with log_file.open("a") as f:
+    #         f.write(json.dumps(
+    #             {
+    #                 'age': age,
+    #                 'bmi': bmi,
+    #                 'children': children,
+    #                 'sex': sex,
+    #                 'smoker': smoker,
+    #                 'region': region,
+    #                 'prediction': prediction[0]
+    #             }
+    #         ))
+    #         f.write("\n")
             
     return round(prediction[0],2)
 
